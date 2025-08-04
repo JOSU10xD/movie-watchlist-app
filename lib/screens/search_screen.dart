@@ -15,11 +15,21 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _api = ApiService();
+  final _controller = TextEditingController();
+  final _focusNode  = FocusNode();
   List<Movie> _results = [];
   bool _loading = false;
   String? _error;
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   Future<void> _search(String term) async {
+    // don't clear the controller here!
     setState(() {
       _loading = true;
       _error = null;
@@ -32,6 +42,8 @@ class _SearchScreenState extends State<SearchScreen> {
     } finally {
       setState(() => _loading = false);
     }
+    // re-focus the field so keyboard events work
+    _focusNode.requestFocus();
   }
 
   @override
@@ -42,8 +54,12 @@ class _SearchScreenState extends State<SearchScreen> {
         Padding(
           padding: const EdgeInsets.all(8),
           child: TextField(
+            controller: _controller,        // ← attach controller
+            focusNode: _focusNode,         // ← attach focus node
+            autofocus: true,               // ← start focused
             decoration: const InputDecoration(labelText: 'Search movies'),
-            onSubmitted: _search,
+            textInputAction: TextInputAction.search,
+            onSubmitted: _search,          // or use onChanged
           ),
         ),
         if (_loading) const LinearProgressIndicator(),
@@ -77,7 +93,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   onPressed: () => watchlist.add(m),
                 ),
               );
-
             },
           ),
         ),

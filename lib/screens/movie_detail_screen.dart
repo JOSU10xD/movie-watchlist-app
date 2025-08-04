@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/movie.dart';
+import '../models/movies.dart';
 import '../services/api_service.dart';
 
 class MovieDetailScreen extends StatefulWidget {
