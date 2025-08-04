@@ -111,4 +111,3 @@ Want to improve or add features? Feel free!
 This project is open-source and available under the **MIT License**. See `LICENSE` for more details.
 
 
-Let me know if you want this exported as a file or need a GitHub description snippet too.
