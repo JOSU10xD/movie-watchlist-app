@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/movies.dart';
 import '../providers/watchlist_provider.dart';
 import '../services/api_service.dart';
+import '../screens/movie_detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -57,6 +58,12 @@ class _SearchScreenState extends State<SearchScreen> {
             itemBuilder: (_, i) {
               final m = _results[i];
               return ListTile(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => MovieDetailScreen(imdbID: m.imdbID),
+                  ),
+                ),
                 leading: Image.network(
                   m.posterUrl,
                   width: 50,
@@ -70,6 +77,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   onPressed: () => watchlist.add(m),
                 ),
               );
+
             },
           ),
         ),
