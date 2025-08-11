@@ -30,6 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> _search(String term) async {
     // don't clear the controller here!
+    _focusNode.unfocus();
     setState(() {
       _loading = true;
       _error = null;
@@ -43,23 +44,23 @@ class _SearchScreenState extends State<SearchScreen> {
       setState(() => _loading = false);
     }
     // re-focus the field so keyboard events work
-    _focusNode.requestFocus();
   }
 
   @override
   Widget build(BuildContext context) {
-    final watchlist = context.read<WatchlistProvider>();
-    return Column(
+  final watchlist = context.read<WatchlistProvider>();
+  return SafeArea(
+    child: Column(
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
           child: TextField(
-            controller: _controller,        // ← attach controller
-            focusNode: _focusNode,         // ← attach focus node
-            autofocus: true,               // ← start focused
+            controller: _controller,
+            focusNode: _focusNode,
+            autofocus: false, // ❌ no auto popup
             decoration: const InputDecoration(labelText: 'Search movies'),
             textInputAction: TextInputAction.search,
-            onSubmitted: _search,          // or use onChanged
+            onSubmitted: (term) => _search(term),
           ),
         ),
         if (_loading) const LinearProgressIndicator(),
@@ -74,12 +75,15 @@ class _SearchScreenState extends State<SearchScreen> {
             itemBuilder: (_, i) {
               final m = _results[i];
               return ListTile(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => MovieDetailScreen(imdbID: m.imdbID),
-                  ),
-                ),
+                onTap: () {
+                  _focusNode.unfocus(); // ✅ also hide keyboard when navigating
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => MovieDetailScreen(imdbID: m.imdbID),
+                    ),
+                  );
+                },
                 leading: Image.network(
                   m.posterUrl,
                   width: 50,
@@ -97,6 +101,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ],
-    );
+    )
+  );
   }
 }

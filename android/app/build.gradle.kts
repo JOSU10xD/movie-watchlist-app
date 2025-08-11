@@ -50,9 +50,11 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
+            isShrinkResources = false // ✅ This will prevent the error
             signingConfig = signingConfigs.getByName("release")
         }
     }
+
 }
 
 flutter {
