@@ -10,7 +10,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -19,21 +19,23 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'CineList',
         theme: ThemeData(
-          colorScheme: ColorScheme.dark(
+          brightness: Brightness.dark,
+          colorScheme: const ColorScheme.dark(
             primary: Colors.cyan,
             secondary: Colors.cyanAccent,
-            surface: const Color(0xFF1E1E1E),
-            background: const Color(0xFF121212),
+            surface: Color(0xFF1E1E1E),
+            background: Color(0xFF121212),
           ),
           scaffoldBackgroundColor: const Color(0xFF121212),
-          appBarTheme: AppBarTheme(
-            backgroundColor: const Color(0xFF1E1E1E),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xFF1E1E1E),
             elevation: 0,
-            iconTheme: const IconThemeData(color: Colors.cyan),
-            titleTextStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Colors.cyan,
-                  fontWeight: FontWeight.bold,
-                ),
+            iconTheme: IconThemeData(color: Colors.cyan),
+            titleTextStyle: TextStyle(
+              color: Colors.cyan,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
           cardTheme: CardTheme(
             color: const Color(0xFF1E1E1E),
@@ -43,8 +45,8 @@ class MyApp extends StatelessWidget {
             ),
             margin: const EdgeInsets.all(8),
           ),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(
-            backgroundColor: const Color(0xFF1E1E1E),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Color(0xFF1E1E1E),
             selectedItemColor: Colors.cyan,
             unselectedItemColor: Colors.grey,
             showUnselectedLabels: true,
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-  
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -66,16 +68,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   late final List<Widget> _pages;
-  
+
   @override
   void initState() {
     super.initState();
-    _pages = [
-      const SearchScreen(),
-      const WatchlistScreen(),
+    _pages = const [
+      SearchScreen(),
+      WatchlistScreen(),
     ];
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
