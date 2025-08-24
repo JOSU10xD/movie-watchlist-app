@@ -1,0 +1,6 @@
+﻿# Placeholder ios/Flutter/Generated.xcconfig created to allow pod install on CI.
+# Flutter tooling will update this file during actual iOS build.
+FLUTTER_ROOT=.
+FLUTTER_APPLICATION_PATH=.
+FLUTTER_BUILD_DIR=build
+FLUTTER_TARGET=lib/main.dart
