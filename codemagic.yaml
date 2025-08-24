@@ -20,6 +20,8 @@ workflows:
       - name: Build iOS (unsigned archive)
         script: |
           flutter build ios --release --no-codesign
+
+          # Create archive
           mkdir -p build/ios/archive
           xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
@@ -29,6 +31,8 @@ workflows:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_IDENTITY=""
+
+          # Export IPA
           mkdir -p build/ios/ipa
           xcodebuild -exportArchive \
             -archivePath build/ios/archive/Runner.xcarchive \
