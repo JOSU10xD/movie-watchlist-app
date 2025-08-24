@@ -14,6 +14,7 @@ require File.join(__dir__, 'Flutter', 'podhelper.rb')
 target 'Runner' do
   # If you do not need frameworks, you can remove `use_frameworks!`.
   # use_frameworks!
+  use_frameworks! :linkage => :static 
   use_modular_headers!
 
   install_all_flutter_pods(File.dirname(File.realpath(__FILE__)))
