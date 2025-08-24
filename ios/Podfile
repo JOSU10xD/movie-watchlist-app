@@ -11,9 +11,9 @@ project 'Runner', {
 require File.join(__dir__, 'Flutter', 'podhelper.rb')
 
 target 'Runner' do
-  # Use dynamic frameworks for Swift plugin compatibility
-  use_frameworks!          # dynamic
-  use_modular_headers!      # modular headers needed for some plugins
+  # Dynamic frameworks needed for Swift plugins (like shared_preferences)
+  use_frameworks!
+  use_modular_headers!
 
   install_all_flutter_pods(File.dirname(File.realpath(__FILE__)))
 end
@@ -23,9 +23,11 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
 
     target.build_configurations.each do |config|
+      # Fix M1/M2 simulator builds
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      # Ensure Swift-based plugins build
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      config.build_settings['SWIFT_VERSION'] = '5.0'   # Force Swift version
+      config.build_settings['SWIFT_VERSION'] = '5.0'
     end
   end
 end
