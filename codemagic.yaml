@@ -22,31 +22,9 @@ workflows:
           pod install --repo-update --verbose
           cd ..
 
-      - name: Pre-build Flutter iOS artifacts
-        script: flutter build ios --release --no-codesign
-
-      - name: Archive app unsigned
+      - name: Build unsigned iOS IPA
         script: |
-          mkdir -p build/ios/archive
-          xcodebuild archive \
-            -workspace ios/Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -archivePath build/ios/archive/Runner.xcarchive \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_IDENTITY=""
-
-      - name: Export IPA unsigned
-        script: |
-          mkdir -p build/ios/ipa
-          xcodebuild -exportArchive \
-            -archivePath build/ios/archive/Runner.xcarchive \
-            -exportPath build/ios/ipa \
-            -exportOptionsPlist ios/exportOptions.plist \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_IDENTITY=""
+          flutter build ipa --release --no-codesign
 
     artifacts:
       - build/ios/ipa/*.ipa
