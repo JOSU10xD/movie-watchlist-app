@@ -13,19 +13,17 @@ workflows:
           rm -rf ~/Library/Developer/Xcode/DerivedData
 
       - name: Install Flutter dependencies
-        script: |
-          flutter pub get
+        script: flutter pub get
 
-      - name: Install iOS CocoaPods dependencies
+      - name: Install CocoaPods dependencies
         script: |
           cd ios
           pod repo update
-          pod install --repo-update
+          pod install --repo-update --verbose
           cd ..
 
-      - name: Build Flutter iOS app (unsigned)
-        script: |
-          flutter build ios --release --no-codesign
+      - name: Pre-build Flutter iOS artifacts
+        script: flutter build ios --release --no-codesign
 
       - name: Archive app unsigned
         script: |
