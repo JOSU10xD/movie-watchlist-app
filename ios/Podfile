@@ -11,6 +11,7 @@ project 'Runner', {
 require File.join(__dir__, 'Flutter', 'podhelper.rb')
 
 target 'Runner' do
+  # Use frameworks and modular headers for plugin compatibility
   use_frameworks! :linkage => :static
   use_modular_headers!
 
@@ -22,7 +23,9 @@ post_install do |installer|
     flutter_additional_ios_build_settings(target)
 
     target.build_configurations.each do |config|
+      # Exclude arm64 for simulator
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+      # Required for building Swift-based plugins
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
     end
   end
