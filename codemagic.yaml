@@ -1,6 +1,6 @@
 workflows:
   ios-unsigned:
-    name: iOS Unsigned Build
+    name: iOS Unsigned IPA
     environment:
       flutter: stable
       xcode: latest
@@ -8,15 +8,26 @@ workflows:
       - name: Install dependencies
         script: flutter pub get
 
-      - name: Build iOS (unsigned)
+      - name: Build iOS (unsigned archive)
         script: |
           flutter build ios --release --no-codesign
+          mkdir -p build/ios/archive
+          xcodebuild archive \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY=""
           mkdir -p build/ios/ipa
           xcodebuild -exportArchive \
             -archivePath build/ios/archive/Runner.xcarchive \
             -exportPath build/ios/ipa \
-            -exportOptionsPlist /dev/null \
-            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY=""
+            -exportOptionsPlist ios/exportOptions.plist \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY=""
 
     artifacts:
       - build/ios/ipa/*.ipa
