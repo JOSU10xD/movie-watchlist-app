@@ -21,8 +21,10 @@ workflows:
           pod install --repo-update
           cd ..
 
-      - name: Build unsigned iOS IPA
-        script: flutter build ipa --release --no-codesign
+      - name: Build unsigned IPA
+        script: |
+          flutter build ipa --release --no-codesign \
+          --obfuscate --split-debug-info=build/ios/obfuscation
 
     artifacts:
       - build/ios/ipa/*.ipa
