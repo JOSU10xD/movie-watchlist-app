@@ -5,26 +5,29 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
-      - name: Clean build
-        script: |
-          flutter clean
-          rm -rf ios/Pods ios/Podfile.lock ios/Runner.xcworkspace build
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-
-      - name: Install Flutter dependencies
+      - name: Install dependencies
         script: flutter pub get
 
-      - name: Install CocoaPods dependencies
+      - name: Build iOS (unsigned archive)
         script: |
-          cd ios
-          pod repo update
-          pod install --repo-update
-          cd ..
-
-      - name: Build unsigned IPA
-        script: |
-          flutter build ipa --release --no-codesign \
-          --obfuscate --split-debug-info=build/ios/obfuscation
+          flutter build ios --release --no-codesign
+          mkdir -p build/ios/archive
+          xcodebuild archive \
+            -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY=""
+          mkdir -p build/ios/ipa
+          xcodebuild -exportArchive \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist ios/exportOptions.plist \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_IDENTITY=""
 
     artifacts:
       - build/ios/ipa/*.ipa
