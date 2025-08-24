@@ -37,13 +37,14 @@ class MyApp extends StatelessWidget {
               fontSize: 20,
             ),
           ),
-          cardTheme: CardTheme(
-            color: const Color(0xFF1E1E1E),
+          // ✅ FIX: CardTheme -> CardThemeData
+          cardTheme: const CardThemeData(
+            color: Color(0xFF1E1E1E),
             elevation: 4,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.all(Radius.circular(12)),
             ),
-            margin: const EdgeInsets.all(8),
+            margin: EdgeInsets.all(8),
           ),
           bottomNavigationBarTheme: const BottomNavigationBarThemeData(
             backgroundColor: Color(0xFF1E1E1E),
