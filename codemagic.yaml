@@ -5,6 +5,11 @@ workflows:
       flutter: stable
       xcode: latest
     scripts:
+      - name: Clean build
+        script: |
+          flutter clean
+          rm -rf ios/Pods ios/Podfile.lock
+
       - name: Install dependencies
         script: |
           flutter pub get
