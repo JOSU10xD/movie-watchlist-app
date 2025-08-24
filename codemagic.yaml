@@ -8,7 +8,7 @@ workflows:
       - name: Clean build
         script: |
           flutter clean
-          rm -rf ios/Pods ios/Podfile.lock
+          rm -rf ios/Pods ios/Podfile.lock ios/Runner.xcworkspace
           rm -rf ~/Library/Developer/Xcode/DerivedData
 
       - name: Install dependencies
@@ -21,8 +21,7 @@ workflows:
 
       - name: Build iOS (unsigned archive)
         script: |
-          flutter build ios --release --no-codesign --verbose
-
+          # Remove flutter build ios step because xcodebuild handles it
           mkdir -p build/ios/archive
           xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
