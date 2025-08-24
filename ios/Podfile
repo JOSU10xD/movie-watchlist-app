@@ -11,8 +11,8 @@ project 'Runner', {
 require File.join(__dir__, 'Flutter', 'podhelper.rb')
 
 target 'Runner' do
-  # Remove use_frameworks! to avoid shared_preferences_foundation errors
-  # use_frameworks! :linkage => :static
+  # Fix for shared_preferences_foundation
+  use_frameworks! :linkage => :static
   use_modular_headers!
 
   install_all_flutter_pods(File.dirname(File.realpath(__FILE__)))
