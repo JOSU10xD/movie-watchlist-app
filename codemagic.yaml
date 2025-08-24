@@ -8,16 +8,15 @@ workflows:
       - name: Install dependencies
         script: flutter pub get
 
-      - name: Build iOS (unsigned for simulator)
+      - name: Build iOS (unsigned)
         script: |
-          flutter build ios --simulator --release
-
-      - name: Package .app into .ipa
-        script: |
-          mkdir -p Payload
-          cp -r build/ios/iphonesimulator/Runner.app Payload/
-          zip -r build/ios/ipa/Runner-unsigned.ipa Payload
-          rm -rf Payload
+          flutter build ios --release --no-codesign
+          mkdir -p build/ios/ipa
+          xcodebuild -exportArchive \
+            -archivePath build/ios/archive/Runner.xcarchive \
+            -exportPath build/ios/ipa \
+            -exportOptionsPlist /dev/null \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGNING_IDENTITY=""
 
     artifacts:
       - build/ios/ipa/*.ipa
