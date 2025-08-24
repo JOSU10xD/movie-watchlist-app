@@ -38,7 +38,6 @@ jobs:
         shell: bash
 
       - name: Ensure ios/Flutter/Generated.xcconfig exists
-        # Podfile checks for this file; create it so pod install won't fail.
         run: |
           mkdir -p ios/Flutter
           if [ ! -f ios/Flutter/Generated.xcconfig ]; then
@@ -49,8 +48,18 @@ jobs:
           fi
         shell: bash
 
+      - name: Patch Xcode project (disable signing)
+        run: |
+          if [ -f ios/Runner.xcodeproj/project.pbxproj ]; then
+            echo "Patching Xcode project to disable DEVELOPMENT_TEAM..."
+            sed -i '' 's/DEVELOPMENT_TEAM = [A-Z0-9]*;/DEVELOPMENT_TEAM = "";/' ios/Runner.xcodeproj/project.pbxproj
+            echo "Patched DEVELOPMENT_TEAM to empty string"
+          else
+            echo "Runner.xcodeproj not found!"
+          fi
+        shell: bash
+
       - name: Build iOS app (release, no codesign)
-        # This runs Flutter tooling which will generate real Flutter files and run pod install.
         run: flutter build ios --release --no-codesign
         shell: bash
 
