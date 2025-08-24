@@ -9,22 +9,26 @@ workflows:
         script: |
           flutter clean
           rm -rf ios/Pods ios/Podfile.lock ios/Runner.xcworkspace
+          rm -rf build
           rm -rf ~/Library/Developer/Xcode/DerivedData
 
-      - name: Install dependencies
+      - name: Install Flutter dependencies
         script: |
           flutter pub get
+
+      - name: Install iOS CocoaPods dependencies
+        script: |
           cd ios
           pod repo update
           pod install --repo-update
           cd ..
 
-      - name: Build iOS (unsigned archive)
+      - name: Build Flutter iOS app (unsigned)
         script: |
-          # Build Flutter iOS artifacts without signing
           flutter build ios --release --no-codesign
 
-          # Archive the app unsigned
+      - name: Archive app unsigned
+        script: |
           mkdir -p build/ios/archive
           xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
@@ -35,7 +39,8 @@ workflows:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_IDENTITY=""
 
-          # Export IPA unsigned
+      - name: Export IPA unsigned
+        script: |
           mkdir -p build/ios/ipa
           xcodebuild -exportArchive \
             -archivePath build/ios/archive/Runner.xcarchive \
