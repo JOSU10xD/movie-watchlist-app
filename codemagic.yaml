@@ -19,9 +19,12 @@ workflows:
           pod install --repo-update
           cd ..
 
+      - name: Configure Flutter iOS for Release
+        script: |
+          flutter build ios --release --config-only
+
       - name: Build iOS (unsigned archive)
         script: |
-          # Remove flutter build ios step because xcodebuild handles it
           mkdir -p build/ios/archive
           xcodebuild archive \
             -workspace ios/Runner.xcworkspace \
